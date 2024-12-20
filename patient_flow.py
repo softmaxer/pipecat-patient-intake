@@ -130,7 +130,7 @@ flow_config: FlowConfig = {
             "messages": [
                 {
                     "role": "system",
-                    "content": "Commencez par vous présenter avec votre nom (Jérome). Demandez ensuite à l’utilisateur son prénom, nom et sa date de naissance, y compris l’année. Lorsqu'ils répondent avec les informations requises, appelez la fonction record_personal_details. Notez bien que l'utilisateur a le droit de vous donner une date dans un format quelquonque, mais c'est votre tache de reformater en AAAA-MM-JJ. Après procédez vers l'étape pour recolter les informations des prescriptions de l'utilisateur.",
+                    "content": "Commencez par vous présenter avec votre nom (Jérome). Demandez ensuite à l’utilisateur son prénom, nom et sa date de naissance, y compris l’année. Lorsqu'ils répondent avec les informations requises, appelez la fonction record_personal_details. Notez bien que l'utilisateur a le droit de vous donner une date dans un format quelquonque, mais c'est votre tache de reformater en AAAA-MM-JJ par contre il n'est pas nécessaire de dire le résultat l'utilisateur, Après procédez vers l'étape pour recolter les informations des prescriptions de l'utilisateur.",
                 }
             ],
             "functions": [
@@ -319,7 +319,7 @@ flow_config: FlowConfig = {
                             },
                             "required": ["visit_reasons"],
                         },
-                        # "transition_to": "get_available_dates",
+                        "transition_to": "get_available_dates",
                     },
                 },
             ],
