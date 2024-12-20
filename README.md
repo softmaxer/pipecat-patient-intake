@@ -9,10 +9,15 @@ L'objectif est simple: Prendre un faux rendez-vous chez un médecin et bloquer l
 - D'abord j'ai pris connaisance du bibliothèque pipecat en testant quelques exemples données dans le répo.
 - Il y avait déjà une `patient_intake` qui est un boilerplate avec quelques questions de screening pour prendre les informations d'un patient avant une visite chez le médecin et elle est une bonne base pour commencer ce projet.
 - Alors, la prèmiere étape est de créer un flow:
+
   1. Quelques sont les questions à poser?
   2. Comment stocker toutes ces informations?
   3. Vérifier qu'il y a une disponibilité dans l'agenda pour les deux semaines suivantes.
   4. Informer le patient que la date de visite souhaité est confirmé.
+
+- Pour le côté server, j'ai gardé le même code d'une exemple: notamment pour lancer l'app FastAPI et de rediriger vers le Daily room.
+- Pour stocker les infos, j'ai utilisé une dictionnaire pour representer un state d'une conversation.
+- J'ai ajouté l'agenda google pour vérifier s'il y a une disponibilité
 
 ## Environment
 
@@ -24,6 +29,14 @@ Et puis, aller vers API & services > OAuth Consent screen > Créer un nouveau co
 Prochainement: API & Services > Credentials > Create client ID et telecharger le fichier `nom_de_app.json`
 Ensuite,
 bougez le fichier `.json` vers `~/.credentials/nom_de_app.json`
+
+Et finalement:
+
+```sh
+python server.py
+```
+
+va lancer le serveur pour tester
 
 ## Testing
 
