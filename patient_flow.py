@@ -48,8 +48,19 @@ cal = init_calendar(os.getenv("EMAIL_ID", ""))
 patient_details: Dict[str, Any] = {}
 
 
+class DepartmentsResult(FlowResult):
+    departments: List[str]
+
+
 class AvailableDatesResult(FlowResult):
     dates: Iterable[str]
+
+
+departments = ["Cardiologie", "Kinésithérapie", "Dentiste"]
+
+
+async def get_departments() -> DepartmentsResult:
+    return {"departments": departments, "status": "success"}
 
 
 async def get_available_dates() -> AvailableDatesResult:
@@ -270,10 +281,19 @@ flow_config: FlowConfig = {
             "messages": [
                 {
                     "role": "system",
-                    "content": "Recueillir des informations sur la raison de leur visite. Demandez-leur ce qui les amène chez le médecin aujourd'hui. Après avoir enregistré leurs raisons, procédez à la planification du jour et de la date de la visite.",
+                    "content": "Recueillir des informations sur la raison de leur visite. Vérifiez bien que les raisons de visite concerne bien les départements de santé présent dans le centre médicale en appelant la fonction get_departments. Si la raison ne concerne pas les départements présents, informet l'utilisateur de prendre un rendez-vous dans un autre centre médicale. Demandez-leur ce qui les amène chez le médecin aujourd'hui. Après avoir enregistré leurs raisons, procédez à la planification du jour et de la date de la visite.",
                 }
             ],
             "functions": [
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "get_departments",
+                        "handler": get_departments,
+                        "description": "Recueillir les départements / domaines de santé disponibles dans le centre médicale.",
+                        "parameters": {"type": "object", "properties": {}},
+                    },
+                },
                 {
                     "type": "function",
                     "function": {
@@ -299,7 +319,7 @@ flow_config: FlowConfig = {
                             },
                             "required": ["visit_reasons"],
                         },
-                        "transition_to": "get_available_dates",
+                        # "transition_to": "get_available_dates",
                     },
                 },
             ],
@@ -388,6 +408,12 @@ flow_config: FlowConfig = {
 }
 
 
+async def handle_transition(function_name: str, args: Dict[str, Any], flow_manager):
+    if function_name == "get_departments":
+        if args["department"] not in departments:
+            await flow_manager.set_node("end")
+
+
 async def main():
     """Main function to set up and run the patient intake bot."""
     async with aiohttp.ClientSession() as session:
@@ -438,7 +464,13 @@ async def main():
         task = PipelineTask(pipeline, PipelineParams(allow_interruptions=True))
 
         # Initialize flow manager with LLM
-        flow_manager = FlowManager(task=task, llm=llm, tts=tts, flow_config=flow_config)
+        flow_manager = FlowManager(
+            task=task,
+            llm=llm,
+            tts=tts,
+            flow_config=flow_config,
+            transition_callback=handle_transition,
+        )
 
         @transport.event_handler("on_first_participant_joined")
         async def on_first_participant_joined(transport, participant):
