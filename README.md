@@ -25,6 +25,10 @@ Prochainement: API & Services > Credentials > Create client ID et telecharger le
 Ensuite,
 bougez le fichier `.json` vers `~/.credentials/nom_de_app.json`
 
+## Testing
+
+Pour l'instant j'ai uniquement une teste unitaire qui teste si le résume d'un patient se génère correctement. Je discute ce topic plus vers la fin du readme.
+
 ## Challenges rencontrées
 
 - La fonctionnement de STT et TTS n'est pas très claire. Dans quelques exemples, le transcription service de Daily est suffisant pour faire le STT, mais pour d'autres exemples (notamment dans les pipecat-flows), il faut utiliser Deepgram. Cette tendence est très ambiguë.
