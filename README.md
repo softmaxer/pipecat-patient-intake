@@ -119,3 +119,9 @@ flow.export() # Il va faire une requête API POST pour sauvegarder le flow dans 
 ```
 
 Cette méthode aussi permet de versionner les prompts.
+
+## Un petit feature qui peut être cool dans un vrai centre médicale
+
+Un centre médicale regroupe plusiers spécialités / départements de la médicine et il peut être util de vérifier si
+la démande d'un patient concerne bien l'un des spécialités / départements présents dans le centre médicale.
+Dans le cas écheant, on peut rediriger le patient vers un centre.
