@@ -31,7 +31,7 @@ bougez le fichier `.json` vers `~/.credentials/nom_de_app.json`
 - C'était un peu dur à passer vers français:
 
   1. En anglais, le flow était évident: Une étape après l'autre, la transition était rapide + claire.
-  2. Une fois que j'ai refais la même chose en français, le bot voulait pas faire la transition et j'était obligé de faire un system message spécific pour rappeler l'IA pour faire la transition sans l'intervention de l'utilisateur. Par exemple: Après avoir pris les liste des médicaments de la patient, le bot a remerciée et il a arreté. je devais intervenir et dire 'je veux toujours faire une visite svp' et c'était que après ça qu'il a continué vers la prochaine étape. Cette problème n'éxistaient pas en anglais.
+  2. Problème de compréhension des dates. Je me suis retrouvé plusiers fois avec un message vocale du bot: "N'hésitez pas à me dire le date en format quelquonque. Je m'occupe de le reformatter." ou des fois l'IA ne comprends pas du tout la date si c'est donnée dans un autre format apart AAAA-MM-DD, même avec une instruction spécific. Ça m'a posé un peu de problème de convertir vers le objet `datetime` pour chercher les dates disponibles dans l'agenda.
 
 - Un "footgun" dans le bibliothèque qui peut poser un peu de problème:
 
@@ -61,6 +61,8 @@ async def my_custom_handler() -> MyCustomResult:
 ## Améliorations
 
 - Tout d'abord vous allez noter que cette infrastructure est très dur à tester. Actuellement j'ai uniquement des testes unitaires pour les 'handlers' utilisées dans les flows. Mais je pense que ça vaut le coup de créer une autre environment teste avec les clés APIs différents (si possible) pour créer des 'micro flows': chaque étape d'un flow, séparé dans les parties.
+
+- La récuperation des dates disponibles ne vérifie pas si c'est le weekend ou pas. Et il n'a pas encore la fonctionalité de vérifier qu'un créneau aussi est disponible.
 
 - On a aussi un Grand dictionnaire python qui dans le code; ce n'est pas du tout éfficace pour faire les modifications + ça risque de faire un peu de "clutter" dans le code.
   Ce qu'on peut faire c'est de stocker un fichier JSON pour chaque établissement clinique: `nom_du_clinique_flow.json` dans une base de données. Et la récuperer vers le début et remplir les handlers avec une classe Python potentiel: `FlowConfigBuilder`
