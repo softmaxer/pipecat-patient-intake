@@ -127,7 +127,7 @@ flow_config: FlowConfig = {
     ],
     "nodes": {
         "start": {
-            "messages": [
+            "task_messages": [
                 {
                     "role": "system",
                     "content": "Commencez par vous présenter avec votre nom (Jérome). Demandez ensuite à l’utilisateur son prénom, nom et sa date de naissance, y compris l’année. Lorsqu'ils répondent avec les informations requises, appelez la fonction record_personal_details. Notez bien que l'utilisateur a le droit de vous donner une date dans un format quelquonque, mais c'est votre tache de reformater en AAAA-MM-JJ par contre il n'est pas nécessaire de dire le résultat l'utilisateur, Après procédez vers l'étape pour recolter les informations des prescriptions de l'utilisateur.",
@@ -160,7 +160,7 @@ flow_config: FlowConfig = {
             ],
         },
         "get_prescriptions": {
-            "messages": [
+            "task_messages": [
                 {
                     "role": "system",
                     "content": "Demandez à l'utilisateur une liste des ordonnances qu'il prend actuellement. Une fois que l'utilisateur a fourni une liste de ses médicaments sur ordonnance ou confirmé qu'ils n'en ont pas, appelez cette fonction : record_prescriptions et avancez vers la prochaine étape pour enregistrer les allergies de l'utilisateur",
@@ -202,7 +202,7 @@ flow_config: FlowConfig = {
             ],
         },
         "get_allergies": {
-            "messages": [
+            "task_messages": [
                 {
                     "role": "system",
                     "content": "Demandez à l'utilisateur s'il a des allergies. Une fois qu'ils ont répertorié leurs allergies ou confirmé qu'ils n'en ont pas, appelez la fonction record_allergies et avancez vers l'étape pour enregistrer les conditions médicales de l'utilisateur",
@@ -240,7 +240,7 @@ flow_config: FlowConfig = {
             ],
         },
         "get_conditions": {
-            "messages": [
+            "task_messages": [
                 {
                     "role": "system",
                     "content": "Recueillir des informations sur l’état de santé apart la raison de visite. Renseignez-vous sur leurs problèmes de santé si l'utilisateur en posède. Après avoir enregistré les conditions (ou confirmé aucune), passez à l'étape suivante pour recueillir les raisons de visite chez le médecin.",
@@ -278,7 +278,7 @@ flow_config: FlowConfig = {
             ],
         },
         "get_visit_reasons": {
-            "messages": [
+            "task_messages": [
                 {
                     "role": "system",
                     "content": "Recueillir des informations sur la raison de leur visite. Vérifiez bien que les raisons de visite concerne bien les départements de santé présent dans le centre médicale en appelant la fonction get_departments. Si la raison ne concerne pas les départements présents, informet l'utilisateur de prendre un rendez-vous dans un autre centre médicale. Demandez-leur ce qui les amène chez le médecin aujourd'hui. Après avoir enregistré leurs raisons, procédez à la planification du jour et de la date de la visite.",
@@ -325,7 +325,7 @@ flow_config: FlowConfig = {
             ],
         },
         "get_available_dates": {
-            "messages": [
+            "task_messages": [
                 {
                     "role": "system",
                     "content": "Obtenez les dates disponibles dans le calendrier et demandez au patient quelle date il préfère, puis procédez vers l'étape pour confirmer la date de la visite.",
@@ -348,7 +348,7 @@ flow_config: FlowConfig = {
             ],
         },
         "get_user_visit_date": {
-            "messages": [
+            "task_messages": [
                 {
                     "role": "system",
                     "content": "Collectez la date de visite souhaitée auprès de l'utilisateur. Notez bien que l'utilisateur a le droit de vous donner une date dans un format quelquonque, mais c'est votre tache de reformater en AAAA-MM-JJ. après avoir formatté la date, appelez la fonction record_user_visit_date",
@@ -376,7 +376,7 @@ flow_config: FlowConfig = {
             ],
         },
         "confirm": {
-            "messages": [
+            "task_messages": [
                 {
                     "role": "system",
                     "content": "Informez à l'utilisateur que la date est bien pris en compte. Une fois confirmé, remerciez-les, puis utilisez la fonction complete_intake pour mettre fin à la conversation.",
@@ -395,7 +395,7 @@ flow_config: FlowConfig = {
             ],
         },
         "end": {
-            "messages": [
+            "task_messages": [
                 {
                     "role": "system",
                     "content": "Remerciez-les pour leur temps et mettez fin à la conversation.",
@@ -476,7 +476,7 @@ async def main():
         async def on_first_participant_joined(transport, participant):
             await transport.capture_participant_transcription(participant["id"])
             # Initialize the flow processor
-            await flow_manager.initialize([])
+            await flow_manager.initialize()
             # Kick off the conversation using the context aggregator
             await task.queue_frames([context_aggregator.user().get_context_frame()])
 
